@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="check-in-by-pnr-papi-test-suite.xml" />
+	<munit:test name="check-in-by-pnr-papi-happy-path-test" doc:id="23066201-ab65-40dd-b848-aa01bc49c043" >
+		<munit:execution>
+			<munit:set-event doc:name="Set Event" doc:id="823f2989-6ba3-428e-bb9a-84e381dbe071" >
+				<munit:payload value='{
+    "lastName": "Smith",
+    "numBags": 2
+}' mediaType="application/json" />
+				<munit:attributes value="#[{uriParams: {PNR: 'P1234'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="check-in-by-pnr-papi" doc:id="08320a24-3608-493b-bd0e-aaa58e671f68" name="check-in-by-pnr-papi" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="30977cde-b691-42e2-a0b9-16b8dbfe9294" is='#[MunitTools::equalTo({paymentID: "PAY-1AKD7482FAB9STATKO"})]' message="#['Failed: Expected payment ID to be PAY-1AKD7482FAB9STATKO, but found ' ++ payload.paymentID as String ++ ' instead!']" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
