@@ -20,6 +20,9 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	greeting: 'Hello Mr. ' ++ message.payload.'lastName' as String 
 				++ '; Your Record Locator is: ' ++ vars.PNR as String
 }]"/>
+		<flow-ref doc:name="flights-management-sapi" doc:id="0c09b4e6-3b65-4bc7-a13f-3196ed0ac0a8" name="flights-management-sapi"/>
+		<flow-ref doc:name="register-passenger-data-sapi" doc:id="2f06c352-2e75-44d3-87e0-b65185a12a32" name="register-passenger-data-sapi"/>
+		<flow-ref doc:name="create-payment-for-bags-sapi" doc:id="8567f476-8e00-4778-a6cb-a8fdcecad925" name="create-payment-for-bags-sapi"/>
 		<ee:transform doc:name="Transform Message" doc:id="ce107f99-a081-44f4-8363-01308239efb5" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -27,6 +30,27 @@ output application/java
 ---
 {
 	"paymentID": "PAY-1AKD7482FAB9STATKO"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="flights-management-sapi" doc:id="0a35580d-78f1-49d5-a4ef-35a3ebc82540" >
+		<logger level="INFO" doc:name="Logger" doc:id="a2395d29-7fb6-4016-a26a-eb6d0636e4bb" />
+	</flow>
+	<flow name="register-passenger-data-sapi" doc:id="dd6e87aa-8c4c-44ef-b3f8-a6fb8ee7c958" >
+		<logger level="INFO" doc:name="Logger" doc:id="5434ec19-c730-4341-a45a-6de06ad8f4b1" />
+	</flow>
+	<flow name="create-payment-for-bags-sapi" doc:id="ca1b896e-1c82-4ba0-9a1a-ee2a44bd1634" >
+		<logger level="INFO" doc:name="Logger" doc:id="d66ad8ba-cbaf-4ae3-82d5-48b06b98b9ef" />
+		<http:request method="GET" doc:name="FakeRequest" doc:id="3da93233-29b8-4b21-8828-3a002b215a4c" url="http://www.mulesoft.com"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3412d5e8-8016-4b44-8abf-9c52ab386eda" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="41b04444-1c5e-488b-831f-1ec49097af8f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	status: 'PAID'
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
